@@ -5,6 +5,9 @@
 # Author: Richard
 #
 # Date: 25/12/2024
+#
+# How to run
+# $ python3 improved.day1.py -f day1.input
 
 # Imports
 import argparse, os
