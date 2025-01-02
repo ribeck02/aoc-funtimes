@@ -13,10 +13,12 @@ from argparse import ArgumentParser
 # Initialise lists
 reportList = []
 orderedReports = []
+notOrdered = 0
 
 
 # Function to generate lists for comparison
 def getList(data):
+    global reportList
     for line in data:
         a = line.strip()
         b = a.split(" ")
@@ -25,34 +27,42 @@ def getList(data):
     return reportList
 
 def safeReports(input):
+    global orderedReports
+    global notOrdered
     for line in input:
-        print(line)
-        if line[1] > line[0]:
-            #print("ASC")
+        if int(line[1]) > int(line[0]):
+            notOrdered = 0
+            badGap = 0
             for i in range(len(line)-1):
-                ascCount = 0
                 i = i+1
-                if line[i] > line[i-1]:
-                    print(str(line[i]) + " " + str(line[i-1]))
+                if int(line[i]) > int(line[i-1]):
                     limit = int(line[i]) - int(line[i-1])
-                    if limit > 3:
-                        ascCount = ascCount +1 
-                        #print(ascCount)
-            if ascCount == 0:
+                    if int(limit) > 3 or int(limit) < 1:
+                        badGap = badGap + 1
+                        break
+                else:
+                    notOrdered = notOrdered + 1
+                    break
+            if int(badGap) == 0 and int(notOrdered) == 0:
                 orderedReports.append(line)
         else:
-            #print("DSC")
+            notOrdered = 0
+            badGap = 0
             for x in range(len(line)-1):
-                dscCount = 0
                 x = x+1
-                if line[x] < line[x-1]:
-                    print(str(line[x]) + " " + str(line[x-1]))
-                    limit = int(line[x]) - int(line[x-1])
-                    if limit > 3:
-                        dscCount = dscCount + 1
-            if dscCount == 0:
+                if int(line[x]) < int(line[x-1]):
+                    limit = int(line[x-1]) - int(line[x])
+                    if int(limit) > 3 or int(limit) < 1:
+                        badGap = badGap + 1
+                        break
+                else:
+                    notOrdered = notOrdered + 1
+                    break
+            if int(badGap) == 0 and int(notOrdered) == 0:
                 orderedReports.append(line)
     print(len(orderedReports))
+    # for i in orderedReports:
+    #     print(i)
     return orderedReports
 
 # ArgParse
